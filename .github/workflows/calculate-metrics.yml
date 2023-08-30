@@ -1,14 +1,9 @@
 name: Calculate Metrics CI
 
 on:
-  workflow_run:
-    workflows: ["Docker build and push"]
-    types:
-      - completed
-# on:
-#   push:
-#     branches:
-#       - main
+  push:
+    branches:
+      - main
 
 jobs:
   calculate-metrics:
@@ -31,19 +26,19 @@ jobs:
       - name: ➕ Generate metrics
         run: docker run --rm -v "$(pwd)/metrics":/app/metrics -v "$(pwd)/.git":/app/.git abhimishraa/dorametrics:latest --calculate-metrics
 
-      - name: 🔎 Fetch secrets
-        env:
-          COMPASS_USER_EMAIL: ${{ secrets.COMPASS_USER_EMAIL }}
-          COMPASS_USER_API_KEY: ${{ secrets.COMPASS_USER_API_KEY }}
-          COMPASS_METRICS_BASE_URL: ${{ secrets.COMPASS_METRICS_BASE_URL }}
-        run: |
-          echo "COMPASS_USER_EMAIL=$COMPASS_USER_EMAIL" >> $GITHUB_ENV
-          echo "COMPASS_USER_API_KEY=$COMPASS_USER_API_KEY" >> $GITHUB_ENV
-          echo "COMPASS_METRICS_BASE_URL=$COMPASS_METRICS_BASE_URL" >> $GITHUB_ENV
+      # - name: 🔎 Fetch secrets
+      #   env:
+      #     COMPASS_USER_EMAIL: ${{ secrets.COMPASS_USER_EMAIL }}
+      #     COMPASS_USER_API_KEY: ${{ secrets.COMPASS_USER_API_KEY }}
+      #     COMPASS_METRICS_BASE_URL: ${{ secrets.COMPASS_METRICS_BASE_URL }}
+      #   run: |
+      #     echo "COMPASS_USER_EMAIL=$COMPASS_USER_EMAIL" >> $GITHUB_ENV
+      #     echo "COMPASS_USER_API_KEY=$COMPASS_USER_API_KEY" >> $GITHUB_ENV
+      #     echo "COMPASS_METRICS_BASE_URL=$COMPASS_METRICS_BASE_URL" >> $GITHUB_ENV
 
-      - name: 📣 Notify Compass
-        run: |
-          docker run --rm -v "$(pwd)/metrics":/app/metrics -e COMPASS_USER_EMAIL=$COMPASS_USER_EMAIL -e COMPASS_USER_API_KEY=$COMPASS_USER_API_KEY -e COMPASS_METRICS_BASE_URL=$COMPASS_METRICS_BASE_URL abhimishraa/dorametrics:latest --notify-compass "metrics/data.yaml" "metrics/target-metrics.yaml"
+      # - name: 📣 Notify Compass
+      #   run: |
+      #     docker run --rm -v "$(pwd)/metrics":/app/metrics -e COMPASS_USER_EMAIL=$COMPASS_USER_EMAIL -e COMPASS_USER_API_KEY=$COMPASS_USER_API_KEY -e COMPASS_METRICS_BASE_URL=$COMPASS_METRICS_BASE_URL abhimishraa/dorametrics:latest --notify-compass "metrics/data.yaml" "metrics/target-metrics.yaml"
 
       - name: 💻 Commit files
         run: |
