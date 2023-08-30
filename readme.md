@@ -5,10 +5,6 @@
     </h1>
   </p>
 
-  <p>
-A tool to provide the ability to generate automated metrics for your every releases.
-  </p>
-
 ---
 
   <p>
