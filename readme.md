@@ -1,5 +1,3 @@
-<div>
-  
   <p>
     <h1 align="left">Automated Delivery Metrics
     </h1>
